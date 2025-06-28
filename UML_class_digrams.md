@@ -1,39 +1,38 @@
 # 🧭 UML Diagrams – Air Traffic Control Simulation
 
-This document captures the **UML (Unified Modeling Language)** diagrams of the Air Traffic Control Simulation Project. These diagrams help in understanding the system architecture, class relationships, and control flow.
+This document presents the **UML Class Diagrams** for the `Air Traffic Control Simulation` project. These diagrams visualize the system's structure, including classes, attributes, and methods organized by packages.
 
 ---
 
-## 📦 1. Package Overview
+## 📦 1. Package Structure Overview
 
 ```plaintext
-+------------------+
-| Global_Class     |
-+------------------+
-| - Global_clock   |
-+------------------+
+📦 Global_Class
+   └── 🧭 Global_clock
 
-+------------------+
-| Task_queue       |
-+------------------+
-| - Task           |
-| - ControllTask   |
-| - Task_Engine    |
-| - Task_Queue     |
-| - Link_object    |
-+------------------+
+📦 Task_queue
+   ├── 📄 Task
+   ├── 📄 ControllTask
+   ├── ⚙️ Task_Engine
+   ├── 🔄 Task_Queue
+   └── 🧩 Link_object
 
-+------------------+
-| Airplane         |
-+------------------+
-| - Airplane       |
-| - Runway         |
-| - Taxiway        |
-| - Airplane_states|
-| - Traffic_Network|
-| - Airplane_List  |
-+------------------+
+📦 Airplane
+   ├── ✈️ Airplane
+   ├── 🛬 Runway
+   ├── 🛫 Taxiway
+   ├── 🎛️ Traffic_Network
+   ├── 📋 Airplane_List_Class
+   └── 📊 Airplane_states (Enum)
+```
+
 ---
+
+## 🧭 Global_Class
+
+### `Global_clock`
+
+```plaintext
 +-------------------------------+
 |         Global_clock          |
 +-------------------------------+
@@ -56,8 +55,15 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | + getTime(long, long): long   |
 | + run(): void                 |
 +-------------------------------+
+```
 
 ---
+
+## ✈️ Airplane
+
+### `Airplane`
+
+```plaintext
 +-------------------------------+
 |           Airplane            |
 +-------------------------------+
@@ -67,8 +73,8 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | - from: String                |
 | - totalcost: int              |
 | - path: String                |
-| - start: GlobalClock          |
-| - end: GlobalClock            |
+| - start: Global_clock         |
+| - end: Global_clock           |
 | - isLanding: boolean          |
 | - isTakingOff: boolean        |
 +-------------------------------+
@@ -78,8 +84,8 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | + setFrom(String): void       |
 | + setTotalCost(int): void     |
 | + setPath(String): void       |
-| + setStart(GlobalClock): void|
-| + setEnd(GlobalClock): void   |
+| + setStart(Global_clock): void|
+| + setEnd(Global_clock): void  |
 | + setLanding(boolean): void   |
 | + setTakingOff(boolean): void |
 | + getID(): int                |
@@ -88,14 +94,114 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | + getFrom(): String           |
 | + getTotalCost(): int         |
 | + getPath(): String           |
-| + getStart(): GlobalClock     |
-| + getEnd(): GlobalClock       |
+| + getStart(): Global_clock    |
+| + getEnd(): Global_clock      |
 | + isLanding(): boolean        |
 | + isTakingOff(): boolean      |
 | + toString(): String          |
 +-------------------------------+
+```
+
+### `Airplane_states` (Enum)
+
+```plaintext
++-----------------------------+
+|       Airplane_states      |
++-----------------------------+
+| + Airphase                 |
+| + Touchdown                |
+| + Takeoff                  |
+| + Taxii                    |
+| + Hold                     |
+| + Park                     |
+| + FinalState               |
+| + Approach                 |
+| + Land                     |
++-----------------------------+
+```
+
+### `Runway` and `Taxiway`
+
+```plaintext
++-------------------------------+
+|           Runway              |
++-------------------------------+
+| - isOpen: boolean             |
+| - isOccupied: boolean         |
+| - Id: String                  |
++-------------------------------+
+| + Runway()                    |
+| + Runway(boolean, boolean, String) |
+| + getId(): String             |
+| + setId(String): void         |
+| + changeLinkstatus(): void    |
+| + changeOccupancyStatus(): void |
+| + isOpen(): boolean           |
++-------------------------------+
+
++-------------------------------+
+|           Taxiway             |
++-------------------------------+
+| - isOpen: boolean             |
+| - isOccupied: boolean         |
+| - Id: String                  |
++-------------------------------+
+| + Taxiway(boolean, boolean, String) |
+| + getId(): String             |
+| + setId(String): void         |
+| + changeLinkstatus(): void    |
+| + changeOccupancyStatus(): void |
+| + isopen(): boolean           |
++-------------------------------+
+```
+
+### `Traffic_Network`
+
+```plaintext
++-------------------------------+
+|        Traffic_Network        |
++-------------------------------+
+| - R1: Runway (static)         |
+| - R2: Runway (static)         |
+| - T1: Taxiway (static)        |
+| - T2: Taxiway (static)        |
++-------------------------------+
+| + getR1(): Runway             |
+| + setR1(Runway): void         |
+| + getR2(): Runway             |
+| + setR2(Runway): void         |
+| + getT1(): Taxiway            |
+| + setT1(Taxiway): void        |
+| + getT2(): Taxiway            |
+| + setT2(Taxiway): void        |
++-------------------------------+
+```
+
+### `Airplane_List_Class`
+
+```plaintext
++----------------------------------------------+
+|           Airplane_List_Class                |
++----------------------------------------------+
+| - airplanes: ArrayList<Airplane>             |
+| - control: Traffic_Network                   |
++----------------------------------------------+
+| + createAirplane(): void                     |
+| + addAirplane(Airplane): void                |
+| + removeAirplane(int): void                  |
+| + sendTask(Task): void                       |
+| + getTargetAirplane(int): Airplane           |
+| + run(): void                                |
++----------------------------------------------+
+```
 
 ---
+
+## 📄 Task_queue
+
+### `Task`
+
+```plaintext
 +------------------------------------+
 |               Task                 |
 +------------------------------------+
@@ -118,8 +224,11 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | + getGateIDFromUser(): int         |
 | + getAirplaneIDFromUser(): int     |
 +------------------------------------+
+```
 
----
+### `ControllTask`
+
+```plaintext
 +------------------------------------+
 |           ControllTask             |
 +------------------------------------+
@@ -136,8 +245,11 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | + calculateEndingTime(): long      |
 | + closeScanner(): void             |
 +------------------------------------+
+```
 
----
+### `Task_Engine`
+
+```plaintext
 +------------------------------------+
 |           Task_Engine              |
 +------------------------------------+
@@ -152,8 +264,11 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | - holdingAirplane: ControllTask    |
 | - parkingAirplane: ControllTask    |
 +------------------------------------+
+```
 
----
+### `Task_Queue`
+
+```plaintext
 +--------------------------------------------+
 |               Task_Queue                   |
 +--------------------------------------------+
@@ -171,8 +286,11 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | + run(): void                              |
 | + main(String[]): void                     |
 +--------------------------------------------+
+```
 
----
+### `Link_object`
+
+```plaintext
 +-------------------------------+
 |         Link_object           |
 +-------------------------------+
@@ -189,87 +307,6 @@ This document captures the **UML (Unified Modeling Language)** diagrams of the A
 | + setTaxiwayID(int): void     |
 | + setGateID(int): void        |
 +-------------------------------+
+```
 
 ---
-+-----------------------------+
-|       Airplane_states       |
-+-----------------------------+
-| Airphase                    |
-| Touchdown                   |
-| Takeoff                     |
-| Taxii                       |
-| Hold                        |
-| Park                        |
-| FinalState                  |
-| Approach                    |
-| Land                        |
-+-----------------------------+
-
----
-+-------------------------------+
-|           Runway              |
-+-------------------------------+
-| - isOpen: boolean             |
-| - isOccupied: boolean         |
-| - Id: String                  |
-+-------------------------------+
-| + Runway()                    |
-| + Runway(boolean, boolean, String) |
-| + getId(): String             |
-| + setId(String): void         |
-| + changeLinkstatus(): void    |
-| + changeOccupancyStatus(): void |
-| + isOpen(): boolean           |
-+-------------------------------+
-
----
-+-------------------------------+
-|           Taxiway             |
-+-------------------------------+
-| - isOpen: boolean             |
-| - isOccupied: boolean         |
-| - Id: String                  |
-+-------------------------------+
-| + Taxiway(boolean, boolean, String) |
-| + getId(): String             |
-| + setId(String): void         |
-| + changeLinkstatus(): void    |
-| + changeOccupancyStatus(): void |
-| + isopen(): boolean           |
-+-------------------------------+
-
----
-+-------------------------------+
-|        Traffic_Network        |
-+-------------------------------+
-| - R1: Runway (static)         |
-| - R2: Runway (static)         |
-| - T1: Taxiway (static)        |
-| - T2: Taxiway (static)        |
-+-------------------------------+
-| + getR1(): Runway             |
-| + setR1(Runway): void         |
-| + getR2(): Runway             |
-| + setR2(Runway): void         |
-| + getT1(): Taxiway            |
-| + setT1(Taxiway): void        |
-| + getT2(): Taxiway            |
-| + setT2(Taxiway): void        |
-+-------------------------------+
-
----
-+----------------------------------------------+
-|           Airplane_List_Class                |
-+----------------------------------------------+
-| - airplanes: ArrayList<Airplane>             |
-| - control: Traffic_Network                   |
-+----------------------------------------------+
-| + createAirplane(): void                     |
-| + addAirplane(Airplane): void                |
-| + removeAirplane(int): void                  |
-| + sendTask(Task): void                       |
-| + getTargetAirplane(int): Airplane           |
-| + run(): void                                |
-+----------------------------------------------+
-
-
